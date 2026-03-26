@@ -81,9 +81,11 @@ export function ArticleLayout({
           {/* Sidebar */}
           {toc.length > 0 && (
             <aside className="hidden w-64 shrink-0 lg:block">
-              <TableOfContents items={toc} />
-              <div className="mt-8">
-                <NewsletterSignup />
+              <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+                <TableOfContents items={toc} />
+                <div className="mt-8">
+                  <NewsletterSignup />
+                </div>
               </div>
             </aside>
           )}

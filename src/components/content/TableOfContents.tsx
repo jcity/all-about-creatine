@@ -36,7 +36,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   if (!items.length) return null;
 
   return (
-    <nav className="sticky top-20" aria-label="Table of contents">
+    <nav aria-label="Table of contents">
       <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
         On this page
       </h4>
