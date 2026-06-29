@@ -47,6 +47,46 @@
       "priority": "medium",
       "status": "pending",
       "createdAt": "2026-06-29T00:00:00.000Z"
+    },
+    {
+      "id": "site-progress-1",
+      "title": "\u2705 [AUTO] 5 articles written, 4 pushed to GitHub tonight",
+      "description": "What Is Creatine, How Much Creatine, Creatine vs Citrulline Malate, Creapure vs Regular, Does Creatine Cause Weight Gain",
+      "priority": "low",
+      "status": "done",
+      "createdAt": "2026-06-29T03:51:19.150237+00:00"
+    },
+    {
+      "id": "site-progress-2",
+      "title": "\ud83d\udd04 [AUTO] Article page template in progress",
+      "description": "Adding TOC, related posts, reading time, inline CTA",
+      "priority": "medium",
+      "status": "pending",
+      "createdAt": "2026-06-29T03:51:19.150324+00:00"
+    },
+    {
+      "id": "todo-site-1",
+      "title": "Connect a custom domain to Vercel",
+      "description": "Buy a domain (Namecheap, Google Domains) and point it to Vercel. Yourdomain.com looks better than jcity-allaboutcreatine.vercel.app",
+      "priority": "medium",
+      "status": "pending",
+      "createdAt": "2026-06-29T03:51:19.150326+00:00"
+    },
+    {
+      "id": "todo-site-2",
+      "title": "Set up email capture (Resend or Beehiiv)",
+      "description": "Already have RESEND_API_KEY in .env.example. Wire up newsletter signup to capture emails for future promotions",
+      "priority": "medium",
+      "status": "pending",
+      "createdAt": "2026-06-29T03:51:19.150327+00:00"
+    },
+    {
+      "id": "todo-site-3",
+      "title": "Add Google Search Console verification",
+      "description": "Free SEO tool from Google. Add verification meta tag to layout.tsx",
+      "priority": "medium",
+      "status": "pending",
+      "createdAt": "2026-06-29T03:51:19.150327+00:00"
     }
   ]
 }
