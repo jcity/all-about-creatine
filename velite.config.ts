@@ -14,6 +14,7 @@ const guides = defineCollection({
     author: s.string(),
     category: s.enum([
       "basics",
+      "women",
       "dosage",
       "benefits",
       "safety",
