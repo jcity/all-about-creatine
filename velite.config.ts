@@ -116,7 +116,7 @@ const faqs = defineCollection({
         question: s.string(),
         answer: s.string(),
       })
-    ),
+    ).default([]),
     draft: s.boolean().default(false),
     slug: s.path().transform((p) => p.split("/").pop()!),
     body: s.mdx(),
