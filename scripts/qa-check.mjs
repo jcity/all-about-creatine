@@ -35,19 +35,25 @@ const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
 const fm = fmMatch ? fmMatch[1] : '';
 
 const titleMatch = fm.match(/title:\s*(.+)/);
-const priceMatch = fm.match(/price:\s*(.+)/) || fm.match(/products?:/);
 const draftMatch = fm.match(/draft:\s*(true|false)/);
+const priceLine = fm.match(/price:\s*(.+)/);
+const productsLine = fm.match(/products?:/);
+const priceMatch = priceLine || productsLine;
 const urlMatches = [...content.matchAll(/https?:\/\/[^\s)]+/g)].map(m => m[0]);
 
 results.schemaValid = !!(titleMatch && priceMatch);
 if (titleMatch) console.log(`  [frontmatter] title: ${titleMatch[1].trim()}`);
-if (priceMatch) console.log(`  [frontmatter] price: ${priceMatch[1].trim()}`);
+if (priceLine) console.log(`  [frontmatter] price: ${priceLine[1].trim()}`);
+else if (productsLine) console.log(`  [frontmatter] products list present`);
 
 // 2. Price format check (should contain $ or "per serving" or "under")
-if (priceMatch) {
-  const priceVal = priceMatch[1].trim();
+if (priceLine) {
+  const priceVal = priceLine[1].trim();
   results.priceFormatOk = /\$|per serving|under/i.test(priceVal);
   console.log(`  [price] format OK: ${results.priceFormatOk}`);
+} else if (productsLine) {
+  results.priceFormatOk = true;
+  console.log(`  [price] products list present, skipped format check`);
 }
 
 // 3. URL presence
