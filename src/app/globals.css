@@ -6,36 +6,14 @@
   --font-serif: "Georgia", ui-serif, serif;
   --font-mono: ui-monospace, "Cascadia Code", monospace;
 
-  /* Primary — trust-building teal */
-  --color-primary-50: oklch(0.97 0.02 180);
-  --color-primary-100: oklch(0.93 0.04 180);
-  --color-primary-200: oklch(0.86 0.07 180);
-  --color-primary-300: oklch(0.76 0.11 180);
-  --color-primary-400: oklch(0.65 0.14 180);
-  --color-primary-500: oklch(0.55 0.15 180);
-  --color-primary-600: oklch(0.47 0.13 180);
-  --color-primary-700: oklch(0.40 0.11 180);
-  --color-primary-800: oklch(0.33 0.09 180);
-  --color-primary-900: oklch(0.27 0.07 180);
-
-  /* Accent — warm amber for CTAs */
-  --color-accent-50: oklch(0.97 0.03 75);
-  --color-accent-100: oklch(0.93 0.06 75);
-  --color-accent-200: oklch(0.88 0.10 75);
-  --color-accent-300: oklch(0.82 0.13 75);
-  --color-accent-400: oklch(0.78 0.15 75);
-  --color-accent-500: oklch(0.75 0.16 75);
-  --color-accent-600: oklch(0.65 0.18 75);
-  --color-accent-700: oklch(0.55 0.16 75);
-  --color-accent-800: oklch(0.45 0.13 75);
-  --color-accent-900: oklch(0.35 0.10 75);
-
-  /* Surface & text */
-  --color-surface: oklch(0.985 0.002 240);
-  --color-surface-raised: oklch(1.0 0 0);
+  --color-primary: oklch(0.45 0.13 180);
+  --color-primary-dark: oklch(0.33 0.11 180);
+  --color-accent: oklch(0.72 0.16 75);
+  --color-accent-dark: oklch(0.58 0.14 75);
+  --color-bg: oklch(0.985 0.002 240);
+  --color-surface: oklch(1.0 0 0);
   --color-surface-muted: oklch(0.96 0.005 240);
   --color-border: oklch(0.90 0.01 240);
-  --color-border-strong: oklch(0.82 0.015 240);
   --color-text: oklch(0.20 0.02 240);
   --color-text-secondary: oklch(0.45 0.02 240);
   --color-text-muted: oklch(0.60 0.01 240);
