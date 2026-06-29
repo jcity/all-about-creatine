@@ -51,6 +51,25 @@ export default async function GuidePage({ params }: Props) {
   const guide = await getGuide(slug);
   if (!guide) notFound();
 
+  let relatedPosts: { title: string; slug: string; description: string; category: string }[] = [];
+  try {
+    const { guides } = await import("#content");
+    relatedPosts = guides
+      .filter((g: { slug: string; draft: boolean; category?: string }) => g.slug !== slug && !g.draft)
+      .sort((a: { category?: string }, b: { category?: string }) => {
+        const aMatch = a.category === guide.category ? 1 : 0;
+        const bMatch = b.category === guide.category ? 1 : 0;
+        return bMatch - aMatch;
+      })
+      .slice(0, 3)
+      .map((g: { slug: string; title: string; description: string; category: string }) => ({
+        title: g.title,
+        slug: g.slug,
+        description: g.description,
+        category: g.category,
+      }));
+  } catch {}
+
   return (
     <>
       <BreadcrumbJsonLd
@@ -76,12 +95,12 @@ export default async function GuidePage({ params }: Props) {
         updatedDate={guide.updatedDate}
         author={guide.author}
         category={guide.category}
-        readingTime={guide.metadata?.readingTime ? `${guide.metadata.readingTime} min read` : undefined}
         breadcrumbs={[
           { label: "Guides", href: "/guides" },
           { label: guide.title },
         ]}
         toc={guide.toc}
+        relatedPosts={relatedPosts}
       >
         <MDXContent code={guide.body} />
       </ArticleLayout>

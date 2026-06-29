@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     type: "article",
     publishedTime: item.date,
     modifiedTime: item.updatedDate,
+    image: item.products?.[0]?.image,
   });
 }
 
@@ -51,6 +52,20 @@ export default async function BestSlugPage({ params }: Props) {
   const { slug } = await params;
   const item = await getBest(slug);
   if (!item) notFound();
+
+  let relatedPosts: { title: string; slug: string; description: string; category: string }[] = [];
+  try {
+    const { best } = await import("#content");
+    relatedPosts = best
+      .filter((b: { slug: string; draft: boolean }) => b.slug !== slug && !b.draft)
+      .slice(0, 3)
+      .map((b: { slug: string; title: string; description: string; category: string }) => ({
+        title: b.title,
+        slug: b.slug,
+        description: b.description,
+        category: b.category,
+      }));
+  } catch {}
 
   return (
     <>
@@ -68,6 +83,7 @@ export default async function BestSlugPage({ params }: Props) {
         datePublished={item.date}
         dateModified={item.updatedDate}
         authorName={item.author}
+        image={item.products?.[0]?.image}
       />
       <ArticleLayout
         title={item.title}
@@ -75,11 +91,14 @@ export default async function BestSlugPage({ params }: Props) {
         date={item.date}
         updatedDate={item.updatedDate}
         author={item.author}
+        category={item.category}
+        readingTime={item.metadata?.readingTime ? `${item.metadata.readingTime} min read` : undefined}
         breadcrumbs={[
           { label: "Best Creatine", href: "/best" },
           { label: item.title },
         ]}
         toc={item.toc}
+        relatedPosts={relatedPosts}
       >
         <AffiliateDisclosure />
         <ComparisonTable products={item.products} />

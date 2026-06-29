@@ -48,8 +48,8 @@ export function TableOfContents({ items }: TableOfContentsProps) {
               className={cn(
                 "-ml-px border-l-2 pl-3 block py-1 transition-colors",
                 activeId === item.url.slice(1)
-                  ? "border-primary-500 text-primary-600 font-medium"
-                  : "border-transparent text-text-muted hover:text-text-secondary hover:border-border-strong"
+                  ? "border-primary text-primary font-medium"
+                  : "border-transparent text-text-muted hover:text-text-secondary hover:border-border"
               )}
             >
               {item.title}
@@ -61,8 +61,8 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                 className={cn(
                   "-ml-px border-l-2 pl-6 block py-1 text-xs transition-colors",
                   activeId === sub.url.slice(1)
-                    ? "border-primary-500 text-primary-600 font-medium"
-                    : "border-transparent text-text-muted hover:text-text-secondary hover:border-border-strong"
+                    ? "border-primary text-primary font-medium"
+                    : "border-transparent text-text-muted hover:text-text-secondary hover:border-border"
                 )}
               >
                 {sub.title}

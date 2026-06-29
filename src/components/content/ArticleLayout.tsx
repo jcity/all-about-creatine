@@ -4,12 +4,20 @@ import { AuthorBio } from "@/components/content/AuthorBio";
 import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
-import { Calendar, Clock } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Calendar, Clock } from "lucide-react";
 
 interface TocItem {
   title: string;
   url: string;
   items?: TocItem[];
+}
+
+interface RelatedPost {
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
 }
 
 interface ArticleLayoutProps {
@@ -22,6 +30,7 @@ interface ArticleLayoutProps {
   readingTime?: string;
   breadcrumbs: { label: string; href?: string }[];
   toc?: TocItem[];
+  relatedPosts?: RelatedPost[];
   children: React.ReactNode;
 }
 
@@ -35,6 +44,7 @@ export function ArticleLayout({
   readingTime,
   breadcrumbs,
   toc = [],
+  relatedPosts = [],
   children,
 }: ArticleLayoutProps) {
   return (
@@ -43,16 +53,18 @@ export function ArticleLayout({
 
       <article>
         {/* Header */}
-        <header className="mb-8">
+        <header className="mb-10">
           {category && (
-            <Badge variant="primary" className="mb-3">
+            <Badge variant="primary" className="mb-4">
               {category}
             </Badge>
           )}
-          <h1 className="mb-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <h1 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             {title}
           </h1>
-          <p className="mb-4 text-lg text-text-secondary">{description}</p>
+          <p className="mb-5 text-lg text-text-secondary leading-relaxed">
+            {description}
+          </p>
           <div className="flex flex-wrap items-center gap-4 text-sm text-text-muted">
             <div className="flex items-center gap-1.5">
               <Calendar className="h-4 w-4" />
@@ -92,8 +104,51 @@ export function ArticleLayout({
         </div>
 
         {/* Author bio */}
-        <AuthorBio name={author} />
+        <div className="mt-12">
+          <AuthorBio name={author} date={date} readingTime={readingTime} />
+        </div>
+
+        {/* Related posts */}
+        {relatedPosts.length > 0 && (
+          <section className="mt-14 border-t border-border pt-12">
+            <h2 className="mb-6 text-2xl font-bold tracking-tight">
+              Continue reading
+            </h2>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={getPostHref(post.category, post.slug)}
+                  className="group flex flex-col rounded-xl border border-border bg-surface-raised p-5 transition-colors hover:border-primary/30 hover:shadow-sm"
+                >
+                  <span className="mb-3 text-xs font-medium uppercase tracking-widest text-primary">
+                    {post.category}
+                  </span>
+                  <h3 className="mb-2 text-base font-semibold group-hover:text-primary line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p className="mb-4 flex-1 text-sm leading-relaxed text-text-secondary line-clamp-2">
+                    {post.description}
+                  </p>
+                  <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
+                    Read <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </article>
     </div>
   );
+}
+
+function getPostHref(category: string, slug: string): string {
+  if (["basics", "dosage", "benefits", "safety", "science", "types"].includes(category)) {
+    return `/guides/${slug}`;
+  }
+  if (category === "comparison" || slug.startsWith("best/")) {
+    return `/best/${slug}`;
+  }
+  return `/guides/${slug}`;
 }

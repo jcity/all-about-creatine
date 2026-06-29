@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
-import { Accordion } from "@/components/ui/Accordion";
+import { ArticleLayout } from "@/components/content/ArticleLayout";
 import { MDXContent } from "@/components/content/MDXContent";
-import { FAQJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { Accordion } from "@/components/ui/Accordion";
+import { ArticleJsonLd, FAQJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { createMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/constants";
 
@@ -40,6 +40,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: faq.title,
     description: faq.description,
     path: `/faq/${faq.slug}`,
+    type: "article",
+    publishedTime: faq.date,
+    modifiedTime: faq.updatedDate,
   });
 }
 
@@ -47,6 +50,24 @@ export default async function FAQSlugPage({ params }: Props) {
   const { slug } = await params;
   const faq = await getFAQ(slug);
   if (!faq) notFound();
+
+  let relatedPosts: { title: string; slug: string; description: string; category: string }[] = [];
+  try {
+    const { faqs } = await import("#content");
+    relatedPosts = faqs
+      .filter((f: { slug: string; draft: boolean }) => f.slug !== slug && !f.draft)
+      .slice(0, 3)
+      .map((f: { slug: string; title: string; description: string; category?: string }) => ({
+        title: f.title,
+        slug: f.slug,
+        description: f.description,
+        category: f.category || "FAQ",
+      }));
+  } catch {}
+
+  const readingTime = faq.metadata?.readingTime
+    ? `${faq.metadata.readingTime} min read`
+    : undefined;
 
   return (
     <>
@@ -58,21 +79,21 @@ export default async function FAQSlugPage({ params }: Props) {
           { name: faq.title, url: `${siteConfig.url}/faq/${faq.slug}` },
         ]}
       />
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-        <Breadcrumbs
-          items={[
-            { label: "FAQ", href: "/faq" },
-            { label: faq.title },
-          ]}
-        />
-
-        <header className="mb-8">
-          <h1 className="mb-3 text-3xl font-bold tracking-tight sm:text-4xl">
-            {faq.title}
-          </h1>
-          <p className="text-lg text-text-secondary">{faq.description}</p>
-        </header>
-
+      <ArticleLayout
+        title={faq.title}
+        description={faq.description}
+        date={faq.date}
+        updatedDate={faq.updatedDate}
+        author="All About Creatine Editorial Team"
+        category={faq.category}
+        readingTime={readingTime}
+        breadcrumbs={[
+          { label: "FAQ", href: "/faq" },
+          { label: faq.title },
+        ]}
+        toc={faq.toc}
+        relatedPosts={relatedPosts}
+      >
         {/* Quick answers accordion */}
         <section className="mb-10">
           <h2 className="mb-4 text-xl font-semibold">Quick Answers</h2>
@@ -80,10 +101,8 @@ export default async function FAQSlugPage({ params }: Props) {
         </section>
 
         {/* Detailed content */}
-        <div className="prose prose-lg">
-          <MDXContent code={faq.body} />
-        </div>
-      </div>
+        <MDXContent code={faq.body} />
+      </ArticleLayout>
     </>
   );
 }

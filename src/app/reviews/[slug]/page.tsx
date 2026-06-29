@@ -55,6 +55,24 @@ export default async function ReviewSlugPage({ params }: Props) {
   const review = await getReview(slug);
   if (!review) notFound();
 
+  let relatedPosts: { title: string; slug: string; description: string; category: string }[] = [];
+  try {
+    const { reviews } = await import("#content");
+    relatedPosts = reviews
+      .filter((r: { slug: string; draft: boolean }) => r.slug !== slug && !r.draft)
+      .slice(0, 3)
+      .map((r: { slug: string; title: string; description: string; formType: string }) => ({
+        title: r.title,
+        slug: r.slug,
+        description: r.description,
+        category: r.formType || "reviews",
+      }));
+  } catch {}
+
+  const readingTime = review.metadata?.readingTime
+    ? `${review.metadata.readingTime} min read`
+    : undefined;
+
   return (
     <>
       <ProductJsonLd
@@ -70,10 +88,7 @@ export default async function ReviewSlugPage({ params }: Props) {
         items={[
           { name: "Home", url: siteConfig.url },
           { name: "Reviews", url: `${siteConfig.url}/reviews` },
-          {
-            name: review.productName,
-            url: `${siteConfig.url}/reviews/${review.slug}`,
-          },
+          { name: review.productName, url: `${siteConfig.url}/reviews/${review.slug}` },
         ]}
       />
       <ArticleLayout
@@ -83,11 +98,13 @@ export default async function ReviewSlugPage({ params }: Props) {
         updatedDate={review.updatedDate}
         author={review.author}
         category={review.formType}
+        readingTime={readingTime}
         breadcrumbs={[
           { label: "Reviews", href: "/reviews" },
           { label: review.productName },
         ]}
         toc={review.toc}
+        relatedPosts={relatedPosts}
       >
         <AffiliateDisclosure />
 
