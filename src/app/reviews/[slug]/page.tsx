@@ -5,7 +5,6 @@ import { MDXContent } from "@/components/content/MDXContent";
 import { ProsConsList } from "@/components/product/ProsConsList";
 import { StarRating } from "@/components/ui/StarRating";
 import { BuyButton } from "@/components/affiliate/AffiliateLink";
-import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { createMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/constants";
@@ -92,6 +91,7 @@ export default async function ReviewSlugPage({ params }: Props) {
         ]}
       />
       <ArticleLayout
+        affiliateDisclosure={true}
         title={review.title}
         description={review.description}
         date={review.date}
@@ -106,8 +106,7 @@ export default async function ReviewSlugPage({ params }: Props) {
         toc={review.toc}
         relatedPosts={relatedPosts}
       >
-        <AffiliateDisclosure />
-
+        
         {/* Quick summary box */}
         <div className="not-prose mb-8 rounded-xl border border-border bg-surface-raised p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

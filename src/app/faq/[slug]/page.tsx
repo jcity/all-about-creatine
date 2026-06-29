@@ -80,6 +80,7 @@ export default async function FAQSlugPage({ params }: Props) {
         ]}
       />
       <ArticleLayout
+        affiliateDisclosure={true}
         title={faq.title}
         description={faq.description}
         date={faq.date}

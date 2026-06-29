@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/content/ArticleLayout";
 import { MDXContent } from "@/components/content/MDXContent";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { createMetadata } from "@/lib/metadata";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 import { siteConfig } from "@/lib/constants";
 
 interface Props {
@@ -89,6 +90,7 @@ export default async function GuidePage({ params }: Props) {
         authorName={guide.author}
       />
       <ArticleLayout
+        affiliateDisclosure={true}
         title={guide.title}
         description={guide.description}
         date={guide.date}

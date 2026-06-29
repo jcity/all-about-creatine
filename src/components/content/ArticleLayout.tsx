@@ -3,6 +3,7 @@ import { TableOfContents } from "@/components/content/TableOfContents";
 import { AuthorBio } from "@/components/content/AuthorBio";
 import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
 import { Badge } from "@/components/ui/Badge";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
@@ -31,6 +32,7 @@ interface ArticleLayoutProps {
   breadcrumbs: { label: string; href?: string }[];
   toc?: TocItem[];
   relatedPosts?: RelatedPost[];
+  affiliateDisclosure?: boolean;
   children: React.ReactNode;
 }
 
@@ -45,6 +47,7 @@ export function ArticleLayout({
   breadcrumbs,
   toc = [],
   relatedPosts = [],
+  affiliateDisclosure = false,
   children,
 }: ArticleLayoutProps) {
   return (
@@ -103,6 +106,9 @@ export function ArticleLayout({
           )}
         </div>
 
+        {/* Affiliate disclosure */}
+        {affiliateDisclosure && <AffiliateDisclosure />}
+
         {/* Author bio */}
         <div className="mt-12">
           <AuthorBio name={author} date={date} readingTime={readingTime} />
@@ -147,7 +153,7 @@ function getPostHref(category: string, slug: string): string {
   if (["basics", "dosage", "benefits", "safety", "science", "types"].includes(category)) {
     return `/guides/${slug}`;
   }
-  if (category === "comparison" || slug.startsWith("best/")) {
+  if (category === "comparison" || category === "reviews" || slug.startsWith("best/")) {
     return `/best/${slug}`;
   }
   return `/guides/${slug}`;

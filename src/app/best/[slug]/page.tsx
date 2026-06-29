@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { ArticleLayout } from "@/components/content/ArticleLayout";
 import { MDXContent } from "@/components/content/MDXContent";
 import { ComparisonTable } from "@/components/product/ComparisonTable";
-import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { createMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/constants";
@@ -86,6 +85,7 @@ export default async function BestSlugPage({ params }: Props) {
         image={item.products?.[0]?.image}
       />
       <ArticleLayout
+        affiliateDisclosure={true}
         title={item.title}
         description={item.description}
         date={item.date}
@@ -100,8 +100,7 @@ export default async function BestSlugPage({ params }: Props) {
         toc={item.toc}
         relatedPosts={relatedPosts}
       >
-        <AffiliateDisclosure />
-        <ComparisonTable products={item.products} />
+                <ComparisonTable products={item.products} />
         <MDXContent code={item.body} />
       </ArticleLayout>
     </>
