@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface AccordionItem {
   question: string;
@@ -14,34 +12,53 @@ interface AccordionProps {
   className?: string;
 }
 
+/** FAQ Q&A blocks (`.qa`) — collapsible for usability, styled per the mockups. */
 export function Accordion({ items, className }: AccordionProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <div className={cn("divide-y divide-border rounded-lg border border-border", className)}>
-      {items.map((item, index) => (
-        <div key={index}>
-          <button
-            type="button"
-            className="flex w-full items-center justify-between px-5 py-4 text-left font-medium transition-colors hover:bg-surface-muted"
-            onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            aria-expanded={openIndex === index}
-          >
-            <span>{item.question}</span>
-            <ChevronDown
-              className={cn(
-                "ml-2 h-5 w-5 shrink-0 text-text-muted transition-transform duration-200",
-                openIndex === index && "rotate-180"
-              )}
-            />
-          </button>
-          {openIndex === index && (
-            <div className="px-5 pb-4 text-text-secondary leading-relaxed">
-              {item.answer}
-            </div>
-          )}
-        </div>
-      ))}
+    <div className={`not-prose${className ? ` ${className}` : ""}`}>
+      {items.map((item, index) => {
+        const open = openIndex === index;
+        return (
+          <div className="qa" key={index}>
+            <button
+              type="button"
+              onClick={() => setOpenIndex(open ? null : index)}
+              aria-expanded={open}
+              style={{
+                display: "flex",
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                textAlign: "left",
+                font: "inherit",
+              }}
+            >
+              <b style={{ margin: 0 }}>{item.question}</b>
+              <span
+                aria-hidden
+                style={{
+                  color: "var(--teal)",
+                  fontSize: 20,
+                  lineHeight: 1,
+                  transform: open ? "rotate(45deg)" : "none",
+                  transition: "transform .15s",
+                  flex: "none",
+                }}
+              >
+                +
+              </span>
+            </button>
+            {open && <p style={{ marginTop: 6 }}>{item.answer}</p>}
+          </div>
+        );
+      })}
     </div>
   );
 }

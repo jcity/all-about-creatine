@@ -1,44 +1,38 @@
-import Image from "next/image";
+import { reviewer } from "@/lib/constants";
 
 interface AuthorBioProps {
-  name: string;
-  image?: string;
+  name?: string;
+  role?: string;
   bio?: string;
+  initials?: string;
+  /** Prefix the name with "Medically reviewed by". */
+  reviewed?: boolean;
+  /** Accepted for API compatibility; not rendered in the reviewer card. */
   date?: string;
   readingTime?: string;
 }
 
+/**
+ * Reviewer / author card at the foot of articles & reviews (REDESIGN_SPEC §3.16).
+ * Defaults to the medical reviewer — the credibility close on health pages (D4).
+ */
 export function AuthorBio({
-  name,
-  image = "/images/authors/default.png",
-  bio = "Our editorial team is dedicated to providing evidence-based information about creatine supplementation, backed by peer-reviewed research.",
-  date,
-  readingTime,
+  name = reviewer.name,
+  role = reviewer.role,
+  bio = reviewer.bio,
+  initials = reviewer.initials,
+  reviewed = true,
 }: AuthorBioProps) {
   return (
-    <div className="mt-12 flex flex-col gap-4 rounded-xl border border-border bg-surface-raised p-6 sm:flex-row sm:items-start sm:gap-5">
-      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-surface-muted">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          className="object-cover"
-          sizes="56px"
-        />
-      </div>
-      <div className="flex-1">
-        <p className="text-xs font-medium uppercase tracking-wider text-text-muted">
-          Written by
-        </p>
-        <p className="font-semibold">{name}</p>
-        {date && readingTime && (
-          <p className="mt-1 text-xs text-text-muted">
-            {date} · {readingTime} read
-          </p>
-        )}
-        <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-          {bio}
-        </p>
+    <div className="authorbio not-prose">
+      <span className="av">{initials}</span>
+      <div>
+        <b>
+          {reviewed ? "Medically reviewed by " : ""}
+          {name}
+        </b>
+        <div className="role">{role}</div>
+        <p>{bio}</p>
       </div>
     </div>
   );

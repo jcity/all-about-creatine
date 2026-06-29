@@ -1,33 +1,77 @@
-import { Check, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Icon } from "@/components/ui/Icons";
 
 interface ProsConsListProps {
   pros: string[];
   cons: string[];
+  /** "box" = tinted boxes (review pages); "list" = inline columns (listicle). */
+  variant?: "box" | "list";
+  /** Labels — review pages use "What we liked / consider". */
+  prosLabel?: string;
+  consLabel?: string;
   className?: string;
 }
 
-export function ProsConsList({ pros, cons, className }: ProsConsListProps) {
+export function ProsConsList({
+  pros,
+  cons,
+  variant = "box",
+  prosLabel,
+  consLabel,
+  className,
+}: ProsConsListProps) {
+  if (variant === "list") {
+    return (
+      <div className={`pc-list not-prose${className ? ` ${className}` : ""}`}>
+        <div className="pro">
+          <h4 className="pro">
+            <Icon name="check" /> {prosLabel ?? "Pros"}
+          </h4>
+          <ul>
+            {pros.map((p, i) => (
+              <li key={i}>
+                <Icon name="check" /> {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="con">
+          <h4 className="con">
+            <Icon name="x" /> {consLabel ?? "Cons"}
+          </h4>
+          <ul>
+            {cons.map((c, i) => (
+              <li key={i}>
+                <Icon name="x" /> {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={cn("grid gap-4 sm:grid-cols-2", className)}>
-      <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
-        <h4 className="mb-2 font-semibold text-emerald-800">Pros</h4>
-        <ul className="space-y-1.5">
-          {pros.map((pro, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-emerald-900">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-              <span>{pro}</span>
+    <div className={`pc-box not-prose${className ? ` ${className}` : ""}`}>
+      <div className="pcbox pro">
+        <h4>
+          <Icon name="check" /> {prosLabel ?? "What we liked"}
+        </h4>
+        <ul>
+          {pros.map((p, i) => (
+            <li key={i}>
+              <Icon name="check" /> {p}
             </li>
           ))}
         </ul>
       </div>
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-        <h4 className="mb-2 font-semibold text-red-800">Cons</h4>
-        <ul className="space-y-1.5">
-          {cons.map((con, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-red-900">
-              <X className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-              <span>{con}</span>
+      <div className="pcbox con">
+        <h4>
+          <Icon name="x" /> {consLabel ?? "What to consider"}
+        </h4>
+        <ul>
+          {cons.map((c, i) => (
+            <li key={i}>
+              <Icon name="x" /> {c}
             </li>
           ))}
         </ul>

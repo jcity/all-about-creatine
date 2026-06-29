@@ -1,12 +1,11 @@
+import Link from "next/link";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { TableOfContents } from "@/components/content/TableOfContents";
 import { AuthorBio } from "@/components/content/AuthorBio";
-import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
-import { Badge } from "@/components/ui/Badge";
+import { ArticleMeta } from "@/components/content/Bylines";
 import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
-import { formatDate } from "@/lib/utils";
-import Link from "next/link";
-import { ArrowRight, Calendar, Clock } from "lucide-react";
+import { TopPickCard } from "@/components/product/SidebarCards";
+import { Icon, type IconName } from "@/components/ui/Icons";
 
 interface TocItem {
   title: string;
@@ -14,147 +13,124 @@ interface TocItem {
   items?: TocItem[];
 }
 
-interface RelatedPost {
+interface RelatedItem {
   title: string;
-  slug: string;
-  description: string;
-  category: string;
+  href: string;
+  meta?: string;
+  icon?: IconName;
 }
 
 interface ArticleLayoutProps {
-  title: string;
-  description: string;
-  date: string;
-  updatedDate?: string;
-  author: string;
-  category?: string;
-  readingTime?: string;
   breadcrumbs: { label: string; href?: string }[];
+  category?: string;
+  title: string;
+  dek: string;
+  author: string;
+  readMeta: string;
+  shareUrl?: string;
+  heroIcon?: IconName;
+  heroCaption?: string;
   toc?: TocItem[];
-  relatedPosts?: RelatedPost[];
-  affiliateDisclosure?: boolean;
+  related?: RelatedItem[];
+  showDisclosure?: boolean;
+  showTopPick?: boolean;
+  /** Rendered inside the content column before the prose body (e.g. FAQ accordion). */
+  preBody?: React.ReactNode;
   children: React.ReactNode;
 }
 
+/**
+ * Educational article / guide shell (REDESIGN_SPEC §4.4): serif headline, the
+ * medically-reviewed meta row (G1), optional hero, two-column reading layout
+ * with a sticky TOC + top-pick sidebar, reviewer bio, and related reading.
+ */
 export function ArticleLayout({
-  title,
-  description,
-  date,
-  updatedDate,
-  author,
-  category,
-  readingTime,
   breadcrumbs,
+  category,
+  title,
+  dek,
+  author,
+  readMeta,
+  shareUrl,
+  heroIcon,
+  heroCaption,
   toc = [],
-  relatedPosts = [],
-  affiliateDisclosure = false,
+  related = [],
+  showDisclosure = false,
+  showTopPick = true,
+  preBody,
   children,
 }: ArticleLayoutProps) {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+    <>
       <Breadcrumbs items={breadcrumbs} />
 
-      <article>
-        {/* Header */}
-        <header className="mb-10">
-          {category && (
-            <Badge variant="primary" className="mb-4">
-              {category}
-            </Badge>
-          )}
-          <h1 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-            {title}
-          </h1>
-          <p className="mb-5 text-lg text-text-secondary leading-relaxed">
-            {description}
-          </p>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-text-muted">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4" />
-              <time dateTime={date}>{formatDate(date)}</time>
-            </div>
-            {updatedDate && (
-              <span className="text-xs">
-                (Updated {formatDate(updatedDate)})
-              </span>
-            )}
-            {readingTime && (
-              <div className="flex items-center gap-1.5">
-                <Clock className="h-4 w-4" />
-                <span>{readingTime}</span>
-              </div>
-            )}
-            <span>By {author}</span>
+      <div className="arthead">
+        {category && <span className="cat">{category}</span>}
+        <h1 className="serif">{title}</h1>
+        <p className="dek">{dek}</p>
+        <ArticleMeta
+          author={author}
+          readMeta={readMeta}
+          shareUrl={shareUrl}
+          shareTitle={title}
+        />
+      </div>
+
+      {showDisclosure && (
+        <div
+          style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px" }}
+        >
+          <AffiliateDisclosure />
+        </div>
+      )}
+
+      {heroIcon && (
+        <div className="wrap">
+          <div className="hero-img">
+            <Icon name={heroIcon} strokeWidth={1.4} />
+            {heroCaption && <div className="cap">{heroCaption}</div>}
           </div>
-        </header>
+        </div>
+      )}
 
-        {/* Two-column layout */}
-        <div className="flex gap-10">
-          {/* Main content */}
-          <div className="prose prose-lg min-w-0 flex-1">{children}</div>
+      <div className="layout">
+        <div className="content">
+          {preBody}
+          <div className="prose-article">{children}</div>
 
-          {/* Sidebar */}
-          {toc.length > 0 && (
-            <aside className="hidden w-64 shrink-0 lg:block">
-              <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
-                <TableOfContents items={toc} />
-                <div className="mt-8">
-                  <NewsletterSignup />
-                </div>
+          <AuthorBio />
+
+          {related.length > 0 && (
+            <div className="related not-prose">
+              <h3 className="serif">Related reading</h3>
+              <div className="rel-grid">
+                {related.map((r) => (
+                  <Link className="rel" href={r.href} key={r.href}>
+                    <span className="ri">
+                      <Icon name={r.icon ?? "book"} strokeWidth={1.6} />
+                    </span>
+                    <span>
+                      <b>{r.title}</b>
+                      {r.meta && (
+                        <>
+                          <br />
+                          <small>{r.meta}</small>
+                        </>
+                      )}
+                    </span>
+                  </Link>
+                ))}
               </div>
-            </aside>
+            </div>
           )}
         </div>
 
-        {/* Affiliate disclosure */}
-        {affiliateDisclosure && <AffiliateDisclosure />}
-
-        {/* Author bio */}
-        <div className="mt-12">
-          <AuthorBio name={author} date={date} readingTime={readingTime} />
-        </div>
-
-        {/* Related posts */}
-        {relatedPosts.length > 0 && (
-          <section className="mt-14 border-t border-border pt-12">
-            <h2 className="mb-6 text-2xl font-bold tracking-tight">
-              Continue reading
-            </h2>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {relatedPosts.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={getPostHref(post.category, post.slug)}
-                  className="group flex flex-col rounded-xl border border-border bg-surface-raised p-5 transition-colors hover:border-primary/30 hover:shadow-sm"
-                >
-                  <span className="mb-3 text-xs font-medium uppercase tracking-widest text-primary">
-                    {post.category}
-                  </span>
-                  <h3 className="mb-2 text-base font-semibold group-hover:text-primary line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="mb-4 flex-1 text-sm leading-relaxed text-text-secondary line-clamp-2">
-                    {post.description}
-                  </p>
-                  <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
-                    Read <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-      </article>
-    </div>
+        <aside className="rail">
+          <TableOfContents items={toc} />
+          {showTopPick && <TopPickCard heading="Top pick" />}
+        </aside>
+      </div>
+    </>
   );
-}
-
-function getPostHref(category: string, slug: string): string {
-  if (["basics", "dosage", "benefits", "safety", "science", "types"].includes(category)) {
-    return `/guides/${slug}`;
-  }
-  if (category === "comparison" || category === "reviews" || slug.startsWith("best/")) {
-    return `/best/${slug}`;
-  }
-  return `/guides/${slug}`;
 }

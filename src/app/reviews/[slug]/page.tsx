@@ -1,13 +1,27 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArticleLayout } from "@/components/content/ArticleLayout";
+import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { MDXContent } from "@/components/content/MDXContent";
 import { ProsConsList } from "@/components/product/ProsConsList";
+import { VerdictBox } from "@/components/product/VerdictBox";
+import { SpecTable, type SpecRow } from "@/components/product/SpecTable";
 import { StarRating } from "@/components/ui/StarRating";
 import { BuyButton } from "@/components/affiliate/AffiliateLink";
+import { MedicallyReviewedByline } from "@/components/content/Bylines";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
+import { AuthorBio } from "@/components/content/AuthorBio";
+import { TableOfContents } from "@/components/content/TableOfContents";
+import {
+  CompareAlternatives,
+  type Alternative,
+} from "@/components/product/SidebarCards";
+import { StickyMobileCTA } from "@/components/product/StickyMobileCTA";
+import { Icon } from "@/components/ui/Icons";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { createMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/constants";
+import { monthYear, titleCase } from "@/lib/utils";
+import { productHref, productRetailer } from "@/lib/products";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -54,23 +68,39 @@ export default async function ReviewSlugPage({ params }: Props) {
   const review = await getReview(slug);
   if (!review) notFound();
 
-  let relatedPosts: { title: string; slug: string; description: string; category: string }[] = [];
+  let alternatives: Alternative[] = [];
   try {
     const { reviews } = await import("#content");
-    relatedPosts = reviews
+    alternatives = reviews
       .filter((r: { slug: string; draft: boolean }) => r.slug !== slug && !r.draft)
       .slice(0, 3)
-      .map((r: { slug: string; title: string; description: string; formType: string }) => ({
-        title: r.title,
-        slug: r.slug,
-        description: r.description,
-        category: r.formType || "reviews",
+      .map((r: { slug: string; productName: string; price: string; rating: number; formType: string }) => ({
+        name: r.productName,
+        meta: `${titleCase(r.formType)} · ${r.price}`,
+        rating: r.rating,
+        href: `/reviews/${r.slug}`,
       }));
   } catch {}
+  if (alternatives.length === 0) {
+    alternatives = [
+      { name: "Compare all picks", meta: "Best Creatine 2026", rating: 4.9, href: "/best" },
+    ];
+  }
 
-  const readingTime = review.metadata?.readingTime
-    ? `${review.metadata.readingTime} min read`
-    : undefined;
+  const href = productHref(review);
+  const retailer = productRetailer(review) ?? "Amazon";
+  const dateLabel = review.updatedDate
+    ? `Published ${monthYear(review.date)} · Updated ${monthYear(review.updatedDate)}`
+    : `Published ${monthYear(review.date)}`;
+
+  const specRows: SpecRow[] = [
+    { label: "Form", value: titleCase(review.formType) },
+    ...(review.servings
+      ? [{ label: "Servings per container", value: String(review.servings) }]
+      : []),
+    { label: "Price", value: review.price },
+    { label: "Brand", value: review.brand },
+  ];
 
   return (
     <>
@@ -90,59 +120,97 @@ export default async function ReviewSlugPage({ params }: Props) {
           { name: review.productName, url: `${siteConfig.url}/reviews/${review.slug}` },
         ]}
       />
-      <ArticleLayout
-        affiliateDisclosure={true}
-        title={review.title}
-        description={review.description}
-        date={review.date}
-        updatedDate={review.updatedDate}
-        author={review.author}
-        category={review.formType}
-        readingTime={readingTime}
-        breadcrumbs={[
-          { label: "Reviews", href: "/reviews" },
-          { label: review.productName },
-        ]}
-        toc={review.toc}
-        relatedPosts={relatedPosts}
-      >
-        
-        {/* Quick summary box */}
-        <div className="not-prose mb-8 rounded-xl border border-border bg-surface-raised p-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="text-lg font-semibold">{review.productName}</h2>
-              <p className="text-sm text-text-secondary">by {review.brand}</p>
-              <StarRating rating={review.rating} className="mt-2" />
-            </div>
-            <div className="text-right">
-              <p className="mb-2 text-2xl font-bold">{review.price}</p>
-              {review.amazonUrl && (
-                <BuyButton href={review.amazonUrl} retailer="Amazon" />
-              )}
+
+      <Breadcrumbs items={[{ label: "Reviews", href: "/reviews" }, { label: review.productName }]} />
+
+      <div className="wrap">
+        <div className="rev-hero">
+          <div className="rev-gallery">
+            <span className="award">★ Editor&apos;s Choice</span>
+            <div className="bigjar">
+              <div className="lid" />
+              <Icon name="jar" strokeWidth={1.6} />
+              <span>CREATINE</span>
             </div>
           </div>
-          <p className="mt-4 text-sm font-medium italic text-text-secondary">
-            &ldquo;{review.verdict}&rdquo;
-          </p>
+          <div className="rev-main">
+            <span className="lbl">
+              <Icon name="shield" /> {titleCase(review.formType)} · 2026
+            </span>
+            <h1 className="serif">{review.productName} Review</h1>
+            <div className="brandline">
+              by {review.brand}
+              {review.servings ? ` · ${review.servings} servings` : ""}
+            </div>
+
+            <div className="scorebox">
+              <div>
+                <div className="bigscore">
+                  {review.rating.toFixed(1)}
+                  <small>/5</small>
+                </div>
+                <div className="scoremeta">
+                  <StarRating rating={review.rating} />
+                  <div>Based on hands-on testing</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="buy-row">
+              <div className="priceblock">
+                <span className="price">{review.price}</span>
+              </div>
+              <BuyButton
+                href={href}
+                retailer={retailer}
+                productName={review.productName}
+              />
+            </div>
+            <div className="updated">
+              Price last verified {monthYear(review.updatedDate ?? review.date)} ·
+              We may earn a commission
+            </div>
+          </div>
         </div>
 
-        <ProsConsList pros={review.pros} cons={review.cons} />
+        <MedicallyReviewedByline author={review.author} dateLabel={dateLabel} />
+        <AffiliateDisclosure>
+          <strong>Affiliate disclosure:</strong> We earn a commission if you buy
+          through links on this page, at no extra cost to you. Our score is based
+          on independent testing, not the partnership.
+        </AffiliateDisclosure>
+      </div>
 
-        <MDXContent code={review.body} />
+      <div className="layout">
+        <div className="content">
+          <VerdictBox score={review.rating}>{review.verdict}</VerdictBox>
 
-        {/* Bottom CTA */}
-        {review.amazonUrl && (
-          <div className="not-prose mt-8 text-center">
-            <BuyButton
-              href={review.amazonUrl}
-              retailer="Amazon"
-              label={`Buy ${review.productName}`}
-              size="lg"
-            />
+          <ProsConsList variant="box" pros={review.pros} cons={review.cons} />
+
+          <div className="prose-article">
+            <MDXContent code={review.body} />
           </div>
-        )}
-      </ArticleLayout>
+
+          <h2 className="serif" id="specs" style={{ fontSize: 28, color: "var(--navy)", margin: "40px 0 14px", letterSpacing: "-.02em" }}>
+            Specifications
+          </h2>
+          <SpecTable rows={specRows} />
+
+          <AuthorBio />
+        </div>
+
+        <aside className="rail">
+          {review.toc?.length > 0 && <TableOfContents items={review.toc} />}
+          <CompareAlternatives items={alternatives} />
+        </aside>
+      </div>
+
+      <StickyMobileCTA
+        name={`${review.productName} — ${review.price}`}
+        sub={`Editor's Choice · ${review.rating.toFixed(1)}/5`}
+        href={href}
+        retailer={retailer}
+      />
     </>
   );
 }

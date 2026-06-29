@@ -1,40 +1,32 @@
-import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
-
 interface StarRatingProps {
   rating: number;
   maxRating?: number;
+  /** Kept for API compatibility; visual size comes from CSS context. */
   size?: "sm" | "md" | "lg";
   className?: string;
 }
 
-const sizes = {
-  sm: "h-4 w-4",
-  md: "h-5 w-5",
-  lg: "h-6 w-6",
-};
+/**
+ * Gold star glyphs (matches the mockups' ★★★★½ treatment). Accessible:
+ * exposes the numeric value via aria-label, glyphs are decorative.
+ */
+export function StarRating({ rating, maxRating = 5, className }: StarRatingProps) {
+  const full = Math.floor(rating);
+  const frac = rating - full;
+  const hasHalf = frac >= 0.25 && frac < 0.75;
+  const roundUp = frac >= 0.75;
+  const fullCount = roundUp ? full + 1 : full;
+  const empty = Math.max(0, maxRating - fullCount - (hasHalf ? 1 : 0));
 
-export function StarRating({ rating, maxRating = 5, size = "md", className }: StarRatingProps) {
+  const glyphs = "★".repeat(fullCount) + (hasHalf ? "½" : "") + "☆".repeat(empty);
+
   return (
-    <div className={cn("flex items-center gap-0.5", className)} aria-label={`${rating} out of ${maxRating} stars`}>
-      {Array.from({ length: maxRating }, (_, i) => {
-        const filled = i < Math.floor(rating);
-        const half = !filled && i < rating;
-        return (
-          <Star
-            key={i}
-            className={cn(
-              sizes[size],
-              filled
-                ? "fill-accent-500 text-accent-500"
-                : half
-                  ? "fill-accent-500/50 text-accent-500"
-                  : "fill-transparent text-border-strong"
-            )}
-          />
-        );
-      })}
-      <span className="ml-1.5 text-sm font-medium text-text-secondary">{rating.toFixed(1)}</span>
-    </div>
+    <span
+      className={`stars${className ? ` ${className}` : ""}`}
+      role="img"
+      aria-label={`${rating} out of ${maxRating} stars`}
+    >
+      {glyphs}
+    </span>
   );
 }

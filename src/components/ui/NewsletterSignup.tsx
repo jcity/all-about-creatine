@@ -1,15 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Check, Loader2 } from "lucide-react";
 
 interface NewsletterSignupProps {
+  /** "card" = full mint band (home); "inline" = compact stacked form. */
   variant?: "inline" | "card";
+  heading?: string;
+  blurb?: string;
 }
 
 type Status = "idle" | "loading" | "success" | "error";
 
-export function NewsletterSignup({ variant = "card" }: NewsletterSignupProps) {
+/**
+ * Demoted, secondary newsletter capture (D6) — never the page's hero CTA, and
+ * styled in teal (never amber, G3).
+ */
+export function NewsletterSignup({
+  variant = "card",
+  heading = "Stay current on creatine research",
+  blurb = "One concise email a month: new studies decoded, fresh reviews, and price drops on our top picks.",
+}: NewsletterSignupProps) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
@@ -17,24 +27,20 @@ export function NewsletterSignup({ variant = "card" }: NewsletterSignupProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
       const data = await res.json();
-
       if (!res.ok) {
         setStatus("error");
         setMessage(data.error || "Something went wrong.");
         return;
       }
-
       setStatus("success");
-      setMessage("You're subscribed!");
+      setMessage("You're subscribed! Check your inbox to confirm.");
       setEmail("");
     } catch {
       setStatus("error");
@@ -42,90 +48,62 @@ export function NewsletterSignup({ variant = "card" }: NewsletterSignupProps) {
     }
   };
 
-  if (status === "success") {
-    const successEl = (
-      <div className="flex items-center gap-2 text-sm font-medium text-emerald-600">
-        <Check className="h-4 w-4" />
-        <span>{message}</span>
-      </div>
-    );
-
-    if (variant === "inline") return successEl;
-
-    return (
-      <div className="rounded-xl border border-border bg-surface-raised p-6">
-        <div className="mb-3 flex items-center gap-2">
-          <Mail className="h-5 w-5 text-primary-600" />
-          <h3 className="font-semibold">Stay Updated</h3>
-        </div>
-        {successEl}
-      </div>
-    );
-  }
-
   const isLoading = status === "loading";
+
+  const form = (
+    <div>
+      <form className="news-form" onSubmit={handleSubmit}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@email.com"
+          aria-label="Email address"
+          required
+          disabled={isLoading || status === "success"}
+        />
+        <button
+          type="submit"
+          className="btn btn-primary"
+          style={{ whiteSpace: "nowrap" }}
+          disabled={isLoading || status === "success"}
+        >
+          {isLoading ? "Subscribing…" : "Subscribe"}
+        </button>
+      </form>
+      <div
+        className="fine"
+        style={status === "error" ? { color: "var(--amber-dark)" } : undefined}
+        role={status === "error" ? "alert" : undefined}
+      >
+        {status === "success" || status === "error"
+          ? message
+          : "No spam. Unsubscribe anytime. We never sell your data."}
+      </div>
+    </div>
+  );
 
   if (variant === "inline") {
     return (
-      <div>
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            required
-            disabled={isLoading}
-            className="flex-1 rounded-lg border border-border bg-surface-raised px-3 py-2 text-sm outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:opacity-50"
-          />
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
-          >
-            {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-            Subscribe
-          </button>
-        </form>
-        {status === "error" && (
-          <p className="mt-2 text-sm text-red-600">{message}</p>
-        )}
+      <div className="not-prose">
+        <h3 className="serif" style={{ color: "var(--navy)", marginBottom: 8 }}>
+          {heading}
+        </h3>
+        <p style={{ color: "var(--slate)", fontSize: 15, marginBottom: 14 }}>
+          {blurb}
+        </p>
+        {form}
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl border border-border bg-surface-raised p-6">
-      <div className="mb-3 flex items-center gap-2">
-        <Mail className="h-5 w-5 text-primary-600" />
-        <h3 className="font-semibold">Stay Updated</h3>
+    <div className="news not-prose">
+      <div>
+        <h3 className="serif">{heading}</h3>
+        <p>{blurb}</p>
       </div>
-      <p className="mb-4 text-sm text-text-secondary">
-        Get the latest creatine research, reviews, and guides delivered to your inbox.
-      </p>
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          required
-          disabled={isLoading}
-          className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:opacity-50"
-        />
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
-        >
-          {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-          Subscribe
-        </button>
-      </form>
-      {status === "error" && (
-        <p className="mt-2 text-sm text-red-600">{message}</p>
-      )}
-      <p className="mt-2 text-xs text-text-muted">No spam. Unsubscribe anytime.</p>
+      {form}
     </div>
   );
 }

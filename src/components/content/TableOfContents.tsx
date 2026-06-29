@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 
 interface TocItem {
   title: string;
@@ -11,9 +10,10 @@ interface TocItem {
 
 interface TableOfContentsProps {
   items: TocItem[];
+  title?: string;
 }
 
-export function TableOfContents({ items }: TableOfContentsProps) {
+export function TableOfContents({ items, title = "On this page" }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
@@ -21,56 +21,31 @@ export function TableOfContents({ items }: TableOfContentsProps) {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveId(entry.target.id);
         }
       },
       { rootMargin: "-80px 0px -80% 0px" }
     );
-
     headings.forEach((h) => observer.observe(h));
     return () => observer.disconnect();
   }, []);
 
   if (!items.length) return null;
 
+  const flat = items.flatMap((item) => [item, ...(item.items ?? [])]);
+
   return (
-    <nav aria-label="Table of contents">
-      <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
-        On this page
-      </h4>
-      <ul className="space-y-1 border-l border-border pl-3 text-sm">
-        {items.map((item) => (
-          <li key={item.url}>
-            <a
-              href={item.url}
-              className={cn(
-                "-ml-px border-l-2 pl-3 block py-1 transition-colors",
-                activeId === item.url.slice(1)
-                  ? "border-primary text-primary font-medium"
-                  : "border-transparent text-text-muted hover:text-text-secondary hover:border-border"
-              )}
-            >
-              {item.title}
-            </a>
-            {item.items?.map((sub) => (
-              <a
-                key={sub.url}
-                href={sub.url}
-                className={cn(
-                  "-ml-px border-l-2 pl-6 block py-1 text-xs transition-colors",
-                  activeId === sub.url.slice(1)
-                    ? "border-primary text-primary font-medium"
-                    : "border-transparent text-text-muted hover:text-text-secondary hover:border-border"
-                )}
-              >
-                {sub.title}
-              </a>
-            ))}
-          </li>
-        ))}
-      </ul>
+    <nav className="toc" aria-label="Table of contents">
+      <h4>{title}</h4>
+      {flat.map((item) => (
+        <a
+          key={item.url}
+          href={item.url}
+          className={activeId === item.url.slice(1) ? "on" : undefined}
+        >
+          {item.title}
+        </a>
+      ))}
     </nav>
   );
 }

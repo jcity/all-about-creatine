@@ -61,6 +61,11 @@ export function ArticleJsonLd({
             "@type": "Person",
             name: authorName,
           },
+          reviewedBy: {
+            "@type": "Person",
+            name: "Dr. Sarah Reyes, RD, PhD",
+            jobTitle: "Registered Dietitian",
+          },
           publisher: {
             "@type": "Organization",
             name: "All About Creatine",
@@ -69,6 +74,27 @@ export function ArticleJsonLd({
         }}
       />
     </>
+  );
+}
+
+export function ItemListJsonLd({
+  items,
+}: {
+  items: { name: string; url?: string }[];
+}) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        itemListElement: items.map((item, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: item.name,
+          ...(item.url ? { url: item.url } : {}),
+        })),
+      }}
+    />
   );
 }
 
@@ -110,6 +136,11 @@ export function ProductJsonLd({
           author: {
             "@type": "Organization",
             name: "All About Creatine",
+          },
+          reviewedBy: {
+            "@type": "Person",
+            name: "Dr. Sarah Reyes, RD, PhD",
+            jobTitle: "Registered Dietitian",
           },
         },
         aggregateRating: {

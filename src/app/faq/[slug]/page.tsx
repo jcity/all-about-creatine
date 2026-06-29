@@ -3,9 +3,11 @@ import type { Metadata } from "next";
 import { ArticleLayout } from "@/components/content/ArticleLayout";
 import { MDXContent } from "@/components/content/MDXContent";
 import { Accordion } from "@/components/ui/Accordion";
-import { ArticleJsonLd, FAQJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { FAQJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { createMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/constants";
+import { monthYear } from "@/lib/utils";
+import type { IconName } from "@/components/ui/Icons";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -51,23 +53,21 @@ export default async function FAQSlugPage({ params }: Props) {
   const faq = await getFAQ(slug);
   if (!faq) notFound();
 
-  let relatedPosts: { title: string; slug: string; description: string; category: string }[] = [];
+  let related: { title: string; href: string; meta?: string; icon?: IconName }[] = [];
   try {
     const { faqs } = await import("#content");
-    relatedPosts = faqs
+    related = faqs
       .filter((f: { slug: string; draft: boolean }) => f.slug !== slug && !f.draft)
-      .slice(0, 3)
-      .map((f: { slug: string; title: string; description: string; category?: string }) => ({
+      .slice(0, 4)
+      .map((f: { slug: string; title: string }) => ({
         title: f.title,
-        slug: f.slug,
-        description: f.description,
-        category: f.category || "FAQ",
+        href: `/faq/${f.slug}`,
+        icon: "question" as IconName,
       }));
   } catch {}
 
-  const readingTime = faq.metadata?.readingTime
-    ? `${faq.metadata.readingTime} min read`
-    : undefined;
+  const readingTime = faq.metadata?.readingTime ?? "5";
+  const readMeta = `${readingTime} min read · ${monthYear(faq.updatedDate ?? faq.date)}`;
 
   return (
     <>
@@ -80,28 +80,27 @@ export default async function FAQSlugPage({ params }: Props) {
         ]}
       />
       <ArticleLayout
-        affiliateDisclosure={true}
-        title={faq.title}
-        description={faq.description}
-        date={faq.date}
-        updatedDate={faq.updatedDate}
-        author="All About Creatine Editorial Team"
-        category={faq.category}
-        readingTime={readingTime}
         breadcrumbs={[
           { label: "FAQ", href: "/faq" },
           { label: faq.title },
         ]}
+        category="FAQ"
+        title={faq.title}
+        dek={faq.description}
+        author={siteConfig.author}
+        readMeta={readMeta}
+        shareUrl={`${siteConfig.url}/faq/${faq.slug}`}
         toc={faq.toc}
-        relatedPosts={relatedPosts}
+        related={related}
+        preBody={
+          faq.questions?.length ? (
+            <div className="faq not-prose" style={{ marginTop: 0 }}>
+              <h2 className="sec serif">Quick answers</h2>
+              <Accordion items={faq.questions} />
+            </div>
+          ) : undefined
+        }
       >
-        {/* Quick answers accordion */}
-        <section className="mb-10">
-          <h2 className="mb-4 text-xl font-semibold">Quick Answers</h2>
-          <Accordion items={faq.questions} />
-        </section>
-
-        {/* Detailed content */}
         <MDXContent code={faq.body} />
       </ArticleLayout>
     </>
