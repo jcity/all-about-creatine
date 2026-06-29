@@ -67,7 +67,7 @@
     {
       "id": "todo-site-1",
       "title": "Connect a custom domain to Vercel",
-      "description": "Buy a domain (Namecheap, Google Domains) and point it to Vercel. Yourdomain.com looks better than jcity-allaboutcreatine.vercel.app",
+      "description": "Buy a domain (Namecheap, Google Domains) and point it to Vercel. Yourdomain.com looks better than the default Vercel subdomain",
       "priority": "medium",
       "status": "pending",
       "createdAt": "2026-06-29T03:51:19.150326+00:00"
