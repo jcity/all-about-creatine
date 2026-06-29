@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Search, Menu, X } from "lucide-react";
+import { Search, Menu, X, PenLine } from "lucide-react";
 import { navLinks } from "@/lib/constants";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-surface-raised/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+    <header className="border-b border-border bg-surface/80 backdrop-blur-sm">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <span className="text-primary-600">All About</span>
+          <span className="text-primary">All About</span>
           <span>Creatine</span>
         </Link>
 
@@ -22,21 +22,21 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-text-secondary transition-colors hover:text-primary-600"
+              className="text-sm font-medium text-text-secondary transition-colors hover:text-primary"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            className="rounded-lg p-2 text-text-secondary transition-colors hover:bg-surface-muted hover:text-text"
-            aria-label="Search"
+        <div className="flex items-center gap-2">
+          <Link
+            href="/guides/what-is-creatine"
+            className="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-dark sm:inline-flex"
           >
-            <Search className="h-5 w-5" />
-          </button>
+            <PenLine className="h-4 w-4" />
+            Start Here
+          </Link>
 
           {/* Mobile hamburger */}
           <button
@@ -52,17 +52,26 @@ export function Header() {
 
       {/* Mobile nav */}
       {mobileOpen && (
-        <nav className="border-t border-border bg-surface-raised px-4 pb-4 md:hidden">
-          {navLinks.map((link) => (
+        <nav className="border-t border-border bg-surface px-4 pb-4 md:hidden">
+          <div className="flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-muted hover:text-primary"
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
             <Link
-              key={link.href}
-              href={link.href}
-              className="block py-3 text-sm font-medium text-text-secondary transition-colors hover:text-primary-600"
+              href="/guides/what-is-creatine"
+              className="mt-2 rounded-lg bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white"
               onClick={() => setMobileOpen(false)}
             >
-              {link.label}
+              Start Learning
             </Link>
-          ))}
+          </div>
         </nav>
       )}
     </header>

@@ -7,7 +7,7 @@ const footerLinks = {
     { label: "All Guides", href: "/guides" },
     { label: "FAQ", href: "/faq" },
   ],
-  products: [
+  reviews: [
     { label: "Best Creatine 2026", href: "/best/creatine-supplements-2026" },
     { label: "All Reviews", href: "/reviews" },
     { label: "Compare Brands", href: "/best" },
@@ -15,37 +15,37 @@ const footerLinks = {
   site: [
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
-    { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Affiliate Disclosure", href: "/affiliate-disclosure" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
   ],
 };
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-border bg-surface-raised">
+    <footer className="border-t border-border bg-surface-raised">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
-          <div>
+          <div className="lg:col-span-1">
             <Link href="/" className="font-bold text-lg">
-              <span className="text-primary-600">All About</span> Creatine
+              <span className="text-primary">All About</span> Creatine
             </Link>
             <p className="mt-3 text-sm leading-relaxed text-text-secondary">
               {siteConfig.description}
             </p>
           </div>
 
-          {/* Learn */}
+          {/* Guides */}
           <div>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-muted">
               Learn
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {footerLinks.learn.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-text-secondary transition-colors hover:text-primary-600"
+                    className="text-sm text-text-secondary transition-colors hover:text-primary"
                   >
                     {link.label}
                   </Link>
@@ -54,17 +54,17 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Products */}
+          {/* Reviews */}
           <div>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-muted">
-              Products
+              Reviews
             </h3>
-            <ul className="space-y-2">
-              {footerLinks.products.map((link) => (
+            <ul className="space-y-2.5">
+              {footerLinks.reviews.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-text-secondary transition-colors hover:text-primary-600"
+                    className="text-sm text-text-secondary transition-colors hover:text-primary"
                   >
                     {link.label}
                   </Link>
@@ -78,12 +78,12 @@ export function Footer() {
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-muted">
               Site
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {footerLinks.site.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-text-secondary transition-colors hover:text-primary-600"
+                    className="text-sm text-text-secondary transition-colors hover:text-primary"
                   >
                     {link.label}
                   </Link>
@@ -93,11 +93,13 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-border pt-6 text-center text-xs text-text-muted">
-          <p>&copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
+        <div className="mt-12 border-t border-border pt-6 text-center text-xs text-text-muted">
+          <p>
+            &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+          </p>
           <p className="mt-1">
             This site contains affiliate links. See our{" "}
-            <Link href="/affiliate-disclosure" className="underline hover:text-primary-600">
+            <Link href="/affiliate-disclosure" className="underline hover:text-primary">
               affiliate disclosure
             </Link>{" "}
             for details.

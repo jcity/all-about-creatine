@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowRight, BookOpen, Award, HelpCircle } from "lucide-react";
 import { NewsletterSignup } from "@/components/ui/NewsletterSignup";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -23,22 +26,22 @@ export default function HomePage() {
       />
 
       {/* Hero */}
-      <section className="border-b border-border bg-gradient-to-b from-primary-50 to-surface">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-32">
+      <section className="border-b border-border bg-gradient-to-b from-primary/5 to-transparent">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="mb-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Everything You Need to Know About{" "}
-              <span className="text-primary-600">Creatine</span>
+            <p className="mb-3 text-sm font-medium uppercase tracking-widest text-primary">
+              Evidence-Based Supplement Guide
+            </p>
+            <h1 className="mb-5 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+              Everything you need to know about <span className="text-primary">creatine</span>
             </h1>
-            <p className="mb-8 text-lg text-text-secondary sm:text-xl">
-              Evidence-based guides, honest supplement reviews, and expert
-              recommendations to help you make informed decisions about creatine
-              supplementation.
+            <p className="mb-8 text-lg text-text-secondary sm:text-xl leading-relaxed">
+              {siteConfig.description}
             </p>
             <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 href="/guides/what-is-creatine"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-primary-700"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-white transition-colors hover:bg-primary-dark"
               >
                 Start Learning
                 <ArrowRight className="h-4 w-4" />
@@ -54,37 +57,36 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured sections */}
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <FeatureCard
-            icon={<BookOpen className="h-6 w-6" />}
-            title="In-Depth Guides"
-            description="Comprehensive, research-backed articles covering everything from creatine basics to advanced dosing protocols."
-            href="/guides"
-            linkText="Browse Guides"
-          />
-          <FeatureCard
-            icon={<Award className="h-6 w-6" />}
-            title="Product Rankings"
-            description="Hands-on reviews and side-by-side comparisons of the top creatine supplements on the market."
-            href="/best"
-            linkText="See Rankings"
-          />
-          <FeatureCard
-            icon={<HelpCircle className="h-6 w-6" />}
-            title="FAQ"
-            description="Clear, concise answers to the most common questions about creatine supplementation."
-            href="/faq"
-            linkText="Read FAQ"
-          />
+      {/* Quick links */}
+      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { icon: <BookOpen className="h-5 w-5" />, label: "In-Depth Guides", href: "/guides" },
+            { icon: <Award className="h-5 w-5" />, label: "Product Rankings", href: "/best" },
+            { icon: <HelpCircle className="h-5 w-5" />, label: "FAQ", href: "/faq" },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="group flex items-center gap-4 rounded-xl border border-border bg-surface-raised p-5 transition-colors hover:border-primary/30 hover:shadow-sm"
+            >
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                {item.icon}
+              </span>
+              <span className="font-semibold group-hover:text-primary">
+                {item.label}
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
 
       {/* Newsletter */}
       <section className="border-t border-border bg-surface-muted">
         <div className="mx-auto max-w-xl px-4 py-16 text-center sm:px-6">
-          <h2 className="mb-2 text-2xl font-bold">Stay in the Loop</h2>
+          <h2 className="mb-2 text-2xl font-bold tracking-tight">
+            Stay in the loop
+          </h2>
           <p className="mb-6 text-text-secondary">
             Get the latest creatine research and reviews delivered to your inbox.
           </p>
@@ -92,36 +94,5 @@ export default function HomePage() {
         </div>
       </section>
     </>
-  );
-}
-
-function FeatureCard({
-  icon,
-  title,
-  description,
-  href,
-  linkText,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  href: string;
-  linkText: string;
-}) {
-  return (
-    <div className="flex flex-col rounded-xl border border-border bg-surface-raised p-6 transition-shadow hover:shadow-md">
-      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 text-primary-600">
-        {icon}
-      </div>
-      <h3 className="mb-2 text-lg font-semibold">{title}</h3>
-      <p className="mb-4 flex-1 text-sm text-text-secondary">{description}</p>
-      <Link
-        href={href}
-        className="inline-flex items-center gap-1 text-sm font-medium text-primary-600 transition-colors hover:text-primary-700"
-      >
-        {linkText}
-        <ArrowRight className="h-3.5 w-3.5" />
-      </Link>
-    </div>
   );
 }
