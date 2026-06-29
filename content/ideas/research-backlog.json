@@ -1,0 +1,61 @@
+{
+  "seeded": "2026-06-29T04:02:04.215532+00:00",
+  "ideas": [
+    {
+      "id": "idea-001",
+      "title": "Creatine timing: before or after workout?",
+      "why": "High-volume search term. Straight Yes/No answer with citation.",
+      "priority": "high",
+      "status": "pending",
+      "createdAt": "2026-06-29T04:02:04.215243+00:00"
+    },
+    {
+      "id": "idea-002",
+      "title": "Can you mix creatine with coffee? (Caffeine + creatine interaction)",
+      "why": "Common concern. The old 'caffeine blunts creatine' myth needs a modern debunk.",
+      "priority": "high",
+      "status": "pending",
+      "createdAt": "2026-06-29T04:02:04.215339+00:00"
+    },
+    {
+      "id": "idea-003",
+      "title": "Best creatine for women \u2014 dose, timing, and safety",
+      "why": "Fast-growing search segment. Female-specific creatine guidance is underrepresented.",
+      "priority": "high",
+      "status": "pending",
+      "createdAt": "2026-06-29T04:02:04.215341+00:00"
+    },
+    {
+      "id": "idea-004",
+      "title": "Does creatine expire? Shelf life and storage guide",
+      "why": "People search this before buying bulk. Surfaces product recommendations.",
+      "priority": "medium",
+      "status": "pending",
+      "createdAt": "2026-06-29T04:02:04.215342+00:00"
+    },
+    {
+      "id": "idea-005",
+      "title": "Creatine and alcohol: can you drink on creatine?",
+      "why": "High-volume FAQ-type search. Alcohol vs performance is a common crossover query.",
+      "priority": "medium",
+      "status": "pending",
+      "createdAt": "2026-06-29T04:02:04.215342+00:00"
+    },
+    {
+      "id": "idea-006",
+      "title": "Micronized creatine vs regular \u2014 is it worth the markup?",
+      "why": "Product-specific query people search before buying. ON/CON-CRET territory.",
+      "priority": "medium",
+      "status": "pending",
+      "createdAt": "2026-06-29T04:02:04.215343+00:00"
+    },
+    {
+      "id": "idea-007",
+      "title": "Creatine cycle: do you need to cycle on/off?",
+      "why": "Annual cycle interest + common myth. Dense FAQ answer with a comparison tie-in.",
+      "priority": "low",
+      "status": "pending",
+      "createdAt": "2026-06-29T04:02:04.215344+00:00"
+    }
+  ]
+}

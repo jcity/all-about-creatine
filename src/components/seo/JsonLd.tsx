@@ -29,27 +29,46 @@ export function ArticleJsonLd({
   authorName: string;
 }) {
   return (
-    <JsonLd
-      data={{
-        "@context": "https://schema.org",
-        "@type": "Article",
-        headline: title,
-        description,
-        url,
-        image: image || "https://allaboutcreatine.com/images/og/default.png",
-        datePublished,
-        dateModified: dateModified || datePublished,
-        author: {
-          "@type": "Person",
-          name: authorName,
-        },
-        publisher: {
-          "@type": "Organization",
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
           name: "All About Creatine",
           url: "https://allaboutcreatine.com",
-        },
-      }}
-    />
+          description: "Science-backed creatine guides, comparisons, and reviews",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: "https://allaboutcreatine.com/search?q={search_term_string}",
+            },
+            "query-input": "required name=search_term_string",
+          },
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: title,
+          description,
+          url,
+          image: image || "https://allaboutcreatine.com/images/og/default.png",
+          datePublished,
+          dateModified: dateModified || datePublished,
+          author: {
+            "@type": "Person",
+            name: authorName,
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "All About Creatine",
+            url: "https://allaboutcreatine.com",
+          },
+        }}
+      />
+    </>
   );
 }
 
