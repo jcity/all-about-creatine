@@ -8,6 +8,11 @@ export function middleware(request: NextRequest) {
   );
   if (!isAdminPath) return NextResponse.next();
 
+  // Allow unauthenticated access to the login page
+  if (request.nextUrl.pathname === "/admin/login") {
+    return NextResponse.next();
+  }
+
   const token = request.cookies.get("admin_token")?.value;
   const adminToken = process.env.ADMIN_TOKEN;
 
