@@ -85,7 +85,7 @@
       "title": "Add Google Search Console verification",
       "description": "Free SEO tool from Google. Add verification meta tag to layout.tsx",
       "priority": "medium",
-      "status": "pending",
+      "status": "done",
       "createdAt": "2026-06-29T03:51:19.150327+00:00"
     }
   ]
