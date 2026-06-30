@@ -48,6 +48,9 @@ export const metadata: Metadata = {
       "application/rss+xml": "/feed",
     },
   },
+  other: {
+    "impact-site-verification": "3fc9b423-6c55-4e18-a56c-40d7658a99c4",
+  },
   manifest: "/site.webmanifest",
   icons: {
     icon: [
