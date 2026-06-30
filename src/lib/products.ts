@@ -27,7 +27,15 @@ export function productHref(p: {
   brandUrl?: string;
   iherbUrl?: string;
 }): string {
-  return p.amazonUrl || p.impactUrl || p.brandUrl || p.iherbUrl || "#";
+  const raw = p.amazonUrl || p.impactUrl || p.brandUrl || p.iherbUrl || "#";
+  if (!raw || raw === "#") return raw;
+  const tag = process.env.AMAZON_ASSOCIATE_ID;
+  if (!tag) return raw;
+  if (raw.includes("amazon.com")) {
+    const sep = raw.includes("?") ? "&" : "?";
+    return `${raw}${sep}tag=${tag}`;
+  }
+  return raw;
 }
 
 /** Preferred retailer label for the affiliate link. */
