@@ -23,19 +23,23 @@
     },
     {
       "id": "idea-003",
-      "title": "Best creatine for women \u2014 dose, timing, and safety",
+      "title": "Best creatine for women — dose, timing, and safety",
       "why": "Fast-growing search segment. Female-specific creatine guidance is underrepresented.",
       "priority": "high",
-      "status": "pending",
-      "createdAt": "2026-06-29T04:02:04.215341+00:00"
+      "status": "done",
+      "createdAt": "2026-06-29T04:02:04.215341+00:00",
+      "completedAt": "2026-06-30T10:09:06.300Z",
+      "note": "Drafted 2026-06-29 as content/guides/best-creatine-for-women.mdx"
     },
     {
       "id": "idea-004",
       "title": "Does creatine expire? Shelf life and storage guide",
       "why": "People search this before buying bulk. Surfaces product recommendations.",
       "priority": "medium",
-      "status": "pending",
-      "createdAt": "2026-06-29T04:02:04.215342+00:00"
+      "status": "done",
+      "createdAt": "2026-06-29T04:02:04.215342+00:00",
+      "completedAt": "2026-06-30T10:09:06.300Z",
+      "note": "Drafted 2026-06-29 as content/guides/does-creatine-expire.mdx"
     },
     {
       "id": "idea-005",
@@ -47,7 +51,7 @@
     },
     {
       "id": "idea-006",
-      "title": "Micronized creatine vs regular \u2014 is it worth the markup?",
+      "title": "Micronized creatine vs regular — is it worth the markup?",
       "why": "Product-specific query people search before buying. ON/CON-CRET territory.",
       "priority": "medium",
       "status": "pending",
