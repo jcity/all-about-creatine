@@ -50,6 +50,7 @@ export const metadata: Metadata = {
   },
   other: {
     "impact-site-verification": "3fc9b423-6c55-4e18-a56c-40d7658a99c4",
+    "google-site-verification": "FNUJSglPbXxK1ujponi5Xn88gH9e1ya76skMxzZ0YCc",
   },
   manifest: "/site.webmanifest",
   icons: {

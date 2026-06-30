@@ -5,7 +5,7 @@
       "title": "Sign up for Amazon Associates",
       "description": "Get affiliate ID for Amazon product links",
       "priority": "high",
-      "status": "pending",
+      "status": "done",
       "createdAt": "2026-06-29T00:00:00.000Z"
     },
     {
@@ -69,7 +69,7 @@
       "title": "Connect a custom domain to Vercel",
       "description": "Buy a domain (Namecheap, Google Domains) and point it to Vercel. Yourdomain.com looks better than the default Vercel subdomain",
       "priority": "medium",
-      "status": "pending",
+      "status": "done",
       "createdAt": "2026-06-29T03:51:19.150326+00:00"
     },
     {
