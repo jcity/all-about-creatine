@@ -47,7 +47,8 @@
       "why": "High-volume FAQ-type search. Alcohol vs performance is a common crossover query.",
       "priority": "medium",
       "status": "pending",
-      "createdAt": "2026-06-29T04:02:04.215342+00:00"
+      "createdAt": "2026-06-29T04:02:04.215342+00:00",
+      "researchNotes": "Draft written: content/faqs/creatine-and-alcohol.mdx (draft: true, QA 80%). Incomplete: real affiliate link placeholders (amazonUrl fields are '#'). Research note: no dangerous interaction; alcohol is anti-recovery. Need human to verify Water with creatine vs alcohol tension claim. Prices unavailable at time of draft."
     },
     {
       "id": "idea-006",
@@ -55,15 +56,18 @@
       "why": "Product-specific query people search before buying. ON/CON-CRET territory.",
       "priority": "medium",
       "status": "pending",
-      "createdAt": "2026-06-29T04:02:04.215343+00:00"
+      "createdAt": "2026-06-29T04:02:04.215343+00:00",
+      "researchNotes": "Draft written: content/best/micronized-creatine-vs-regular.mdx (draft: true, QA 80%). Products section includes ON Micronized and Nutricost but amazonUrl fields are placeholders ('#'). Research supports: micronization improves solubility, not bioavailability — premium can be worth it for people with sensitive stomachs. Need human to fill in real Amazon ASIN links and current prices."
     },
     {
       "id": "idea-007",
       "title": "Creatine cycle: do you need to cycle on/off?",
       "why": "Annual cycle interest + common myth. Dense FAQ answer with a comparison tie-in.",
       "priority": "low",
-      "status": "pending",
-      "createdAt": "2026-06-29T04:02:04.215344+00:00"
+      "status": "done",
+      "createdAt": "2026-06-29T04:02:04.215344+00:00",
+      "completedAt": "2026-07-01T04:00:00.000Z",
+      "note": "Drafted 2026-07-01 as content/faqs/creatine-cycle.mdx. QA score: 80% (REVIEW). Sources: ISSN 2017 position stand (PubMed 28902176), ISSN systematic review. Products section empty (draft)."
     }
   ]
 }
