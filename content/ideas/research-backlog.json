@@ -48,7 +48,7 @@
       "priority": "medium",
       "status": "pending",
       "createdAt": "2026-06-29T04:02:04.215342+00:00",
-      "researchNotes": "Draft written: content/faqs/creatine-and-alcohol.mdx (draft: true, QA 80%). Incomplete: real affiliate link placeholders (amazonUrl fields are '#'). Research note: no dangerous interaction; alcohol is anti-recovery. Need human to verify Water with creatine vs alcohol tension claim. Prices unavailable at time of draft."
+      "researchNotes": "Draft written: content/faqs/creatine-and-alcohol.mdx (draft: true, QA 80%). Research conclusion: no dangerous acute interaction, but alcohol is anti-recovery. Blocker: products list is empty, so no affiliate CTAs yet; human must confirm whether to feature creatine products here or keep as pure safety FAQ."
     },
     {
       "id": "idea-006",
@@ -57,7 +57,7 @@
       "priority": "medium",
       "status": "pending",
       "createdAt": "2026-06-29T04:02:04.215343+00:00",
-      "researchNotes": "Draft written: content/best/micronized-creatine-vs-regular.mdx (draft: true, QA 80%). Products section includes ON Micronized and Nutricost but amazonUrl fields are placeholders ('#'). Research supports: micronization improves solubility, not bioavailability — premium can be worth it for people with sensitive stomachs. Need human to fill in real Amazon ASIN links and current prices."
+      "researchNotes": "Draft written: content/best/micronized-creatine-vs-regular.mdx (draft: true, QA 80%). Research supports micronization improves solubility, not bioavailability. Blocker: amazonUrl fields are placeholders ('#'); human must replace with real current Amazon ASIN links before publish."
     },
     {
       "id": "idea-007",
